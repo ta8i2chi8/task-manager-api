@@ -1,0 +1,27 @@
+USE task_manager;
+
+CREATE TABLE IF NOT EXISTS statuses(
+  status_id     INT AUTO_INCREMENT,
+  name          VARCHAR(30) NOT NULL,
+  PRIMARY KEY (status_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS types(
+  type_id       INT AUTO_INCREMENT,
+  name          VARCHAR(30) NOT NULL,
+  PRIMARY KEY (type_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS tasks(
+  task_id       BIGINT AUTO_INCREMENT,
+  title         VARCHAR(40) NOT NULL,
+  content       VARCHAR(100) NOT NULL,
+  expired_date  DATE,
+  status_id     INT NOT NULL,
+  type_id       INT NOT NULL,
+  created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (task_id),
+  FOREIGN KEY (status_id) REFERENCES statuses (status_id) ON DELETE RESTRICT,
+  FOREIGN KEY (type_id) REFERENCES types (type_id) ON DELETE RESTRICT
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

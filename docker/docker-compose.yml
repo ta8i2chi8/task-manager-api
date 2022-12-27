@@ -1,0 +1,28 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    container_name: task_manager_db
+    ports:
+      - 3306:3306
+    env_file:
+      - ./mysql/db.env
+    volumes:
+      - ./mysql/data:/var/lib/mysql:cached
+      # - ./log/db:/var/log/mysql:cached
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf:cached
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d:cached
+    command: mysqld
+  backend:
+    image: openjdk:17-jdk-slim
+    container_name: task_manager_app
+    ports:
+      - 8080:8080
+    env_file:
+      - ./mysql/db.env
+    tty: true
+    working_dir: /app
+    volumes:
+      - ../spring_prj:/app
+    depends_on:
+      - db
